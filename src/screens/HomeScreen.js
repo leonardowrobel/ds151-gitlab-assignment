@@ -5,7 +5,7 @@ import client from "../api/gitlab"
 
 const HomeScreen = ({ navigation }) => {
 
-    const { state: { accessToken }, dispatch } = useAuth()
+    const { state: { accessToken }, dispatch, setUserName, userData } = useAuth()
     const [user, setUser] = React.useState('')
     const [password, setPassword] = React.useState('')
 
@@ -18,12 +18,14 @@ const HomeScreen = ({ navigation }) => {
             }
         })
             .then(response => {
-                dispatch({ type: 'login', accessToken: response.data.access_token })
+                setUserName(user)
+                dispatch({ type: 'login', accessToken: response.data.access_token })                
             })
             .catch(error => {
                 console.log(error)
             })
 
+        
         setUser('')
         setPassword('')
     }
@@ -38,6 +40,7 @@ const HomeScreen = ({ navigation }) => {
         return (
             <View style={styles.container}>
                 <Text>HomeScreenn</Text>
+                <Text>{(userData !== null && userData !== undefined) ? userData.name : 'make login'}</Text>
                 <Button
                     title="Logout"
                     onPress={tryLogout}
